@@ -16,7 +16,8 @@ class original_factory{
 class admin{
 };
 
-class consumer{
+class consumer {
+    
 };
 
 
