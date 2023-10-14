@@ -20,7 +20,31 @@ void wq_test() {
 
     repo.get_info();
 }
+void zhy_test()
+{
+    CommodityFactory* tvFactory = new TVFactory();
+    CommodityFactory* computerFactory = new ComputerFactory();
+    CommodityFactory* refrigeratorFactory = new RefrigeratorFactory();
+
+    Commodity* tv = tvFactory->create();
+    Commodity* computer = computerFactory->create();
+    Commodity* refrigerator = refrigeratorFactory->create();
+
+    tv->printInfo();
+    computer->printInfo();
+    refrigerator->printInfo();
+
+    delete tvFactory;
+    delete computerFactory;
+    delete refrigeratorFactory;
+
+    delete tv;
+    delete computer;
+    delete refrigerator;
+}
 int main() {
     wq_test();
+    cout<<"========\n";
+    zhy_test();
     return 0;
 }
