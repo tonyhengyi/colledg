@@ -1,6 +1,6 @@
 compile: test.cpp design.h
-	g++ test.cpp -std=c++2a -o test.out
-	./test.out
+	@g++ test.cpp -std=c++2a -o test.out
+	@./test.out
 
 test1:
     ifneq ($(wildcard test.out),)
