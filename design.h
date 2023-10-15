@@ -11,7 +11,7 @@ enum class commodity_type {
 };
 
 class repository {//仓库类
-    public:
+public:
 
     static repository& get_instance() {
         static repository repo;
@@ -29,7 +29,7 @@ class repository {//仓库类
 
     void del(commodity_type ty, unsigned  cnt) {
 
-        if (list[ty] >= cnt) {
+        if (list[ty] > cnt) {
             list[ty] -= cnt;
             cout << "repo: -" << cnt << "\n";
 
@@ -50,7 +50,7 @@ class repository {//仓库类
                 cout << "type3: " << item.second << '\n';
         }
     }
-    private:
+private:
     unordered_map<commodity_type, unsigned > list;
 
 
@@ -65,7 +65,7 @@ class repository {//仓库类
 
 class admin {//服务员
 
-    public:
+public:
     void add_to_repo(unordered_map<commodity_type, unsigned>list, repository& repo) {
         for (auto item : list) {
 
@@ -89,10 +89,10 @@ class admin {//服务员
 };
 
 class order_list {
-    private:
+private:
     unordered_map<commodity_type, unsigned>list;
 
-    public:
+public:
     void add_to_list(commodity_type ty, unsigned  cnt) {
         cout << "order list: +" << cnt << endl;
         list[ty] += cnt;
@@ -121,7 +121,7 @@ class order_list {
 class consumer {
     order_list buy_list;
 
-    public:
+public:
     void  buy_commodity(commodity_type ty, unsigned  cnt) {
         cout << "consumer: ";
         buy_list.add_to_list(ty, cnt);
@@ -138,77 +138,102 @@ class consumer {
 };
 
 
-class Commodity {//原型模式，通过复制来的得到新的类型
-    public:
+class Commodity {
+public:
     virtual void printInfo() = 0;
     virtual ~Commodity() { }
     virtual commodity_type get_type() = 0;
+    virtual Commodity* clone() = 0;
 };
 
 class TV : public Commodity {
-    public:
+public:
     TV(std::string model) : model_(model) { }
-    void printInfo() {
+    TV(const TV& other) : model_(other.model_) { }
+    void printInfo() override {
         std::cout << "TV Model: " << model_ << std::endl;
     }
-    commodity_type get_type() {
+    commodity_type get_type() override {
         return commodity_type::TYPE_1;
     }
-    private:
+    Commodity* clone() override {
+        return new TV(*this);
+    }
+    static TV* getInstance() { // 静态方法，用于获取一个可克隆的实例
+        static TV instance("Sony");
+        return &instance;
+    }
+private:
     std::string model_;
-
 };
 
+
 class Computer : public Commodity {
-    public:
+public:
     Computer(std::string type) : type_(type) { }
-    void printInfo() {
+    Computer(const Computer& other) : type_(other.type_) { } // copy constructor
+    void printInfo() override {
         std::cout << "Computer Type: " << type_ << std::endl;
     }
-    commodity_type get_type() {
+    commodity_type get_type() override {
         return commodity_type::TYPE_2;
     }
-    private:
+    Commodity* clone() override {
+        return new Computer(*this);
+    }
+    static Computer* getInstance() { // 静态方法，用于获取一个可克隆的实例
+        static Computer instance("Laptop");
+        return &instance;
+    }
+private:
     std::string type_;
 };
 
 class Refrigerator : public Commodity {
-    public:
+public:
     Refrigerator(std::string brand) : brand_(brand) { }
-    void printInfo() {
+    Refrigerator(const Refrigerator& other) : brand_(other.brand_) { } // copy constructor
+    void printInfo() override {
         std::cout << "Refrigerator Brand: " << brand_ << std::endl;
     }
-    commodity_type get_type() {
+    commodity_type get_type() override {
         return commodity_type::TYPE_3;
     }
-    private:
+    Commodity* clone() override {
+        return new Refrigerator(*this);
+    }
+    static Refrigerator* getInstance() { // 静态方法，用于获取一个可克隆的实例
+        static Refrigerator instance("Samsung");
+        return &instance;
+    }
+private:
     std::string brand_;
 };
 
-class CommodityFactory {//抽象工厂
-    public:
-    virtual Commodity* create() = 0;
+class CommodityFactory { //抽象工厂
+public:
+    virtual Commodity* clone() = 0;
     virtual ~CommodityFactory() { }
 };
 
 class TVFactory : public CommodityFactory {
-    public:
-    Commodity* create() {
-        return new TV("Sony");
+public:
+    Commodity* clone() override {
+        return TV::getInstance()->clone(); // 克隆 TV 的静态实例
     }
 };
 
 class ComputerFactory : public CommodityFactory {
-    public:
-    Commodity* create() {
-        return new Computer("Laptop");
+public:
+    Commodity* clone() override {
+        return Computer::getInstance()->clone(); // 克隆 TV 的静态实例
     }
 };
 
 class RefrigeratorFactory : public CommodityFactory {
-    public:
-    Commodity* create() {
-        return new Refrigerator("Samsung");
+public:
+    Commodity* clone() override {
+        return Refrigerator::getInstance()->clone(); // 克隆 TV 的静态实例
     }
 };
 

@@ -6,9 +6,9 @@ void test()
     CommodityFactory* computerFactory = new ComputerFactory();
     CommodityFactory* refrigeratorFactory = new RefrigeratorFactory();
 
-    Commodity* tv = tvFactory->create();
-    Commodity* computer = computerFactory->create();
-    Commodity* refrigerator = refrigeratorFactory->create();
+    Commodity* tv = tvFactory->clone();
+    Commodity* computer = computerFactory->clone();
+    Commodity* refrigerator = refrigeratorFactory->clone();
     cout<<"============================"<<endl;
     cout<<"   Product name:   brand:   "<<endl;
     tv->printInfo();
@@ -16,7 +16,7 @@ void test()
     refrigerator->printInfo();
     cout<<"============================"<<endl;
     cout<<"User order:"<<endl;
-    //用户的订单每样增加20个商品
+
     consumer fa_con;
     cout<<"(Store)Please enter the quantity you need for each product"<<endl;
     unsigned cnt1,cnt2,cnt3;
@@ -30,6 +30,7 @@ void test()
     fa_con.buy_commodity(computer->get_type(), cnt2);
     fa_con.buy_commodity(refrigerator->get_type(), cnt3);
     cout<<"Factory production:"<<endl;
+
     admin factory_admin;
     factory_admin.add_to_repo(fa_con.get_final_order().get_list(), repo);
 
@@ -53,7 +54,7 @@ void test()
         cin>>submit;
         if(submit=='y')
         {
-            
+
             break;
         }
     }
