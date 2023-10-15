@@ -30,7 +30,6 @@ void test()
     fa_con.buy_commodity(computer->get_type(), cnt2);
     fa_con.buy_commodity(refrigerator->get_type(), cnt3);
     cout<<"Factory production:"<<endl;
-
     admin factory_admin;
     factory_admin.add_to_repo(fa_con.get_final_order().get_list(), repo);
 

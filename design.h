@@ -29,7 +29,7 @@ class repository {//仓库类
 
     void del(commodity_type ty, unsigned  cnt) {
 
-        if (list[ty] > cnt) {
+        if (list[ty] >= cnt) {
             list[ty] -= cnt;
             cout << "repo: -" << cnt << "\n";
 
